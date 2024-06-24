@@ -123,6 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
       selectedOption = answer;
     });
     socket.emit('answer', {'roomId': roomId, 'answer': answer});
+    stopTimer(); // Stop the timer when an answer is sent
   }
 
   void startTimer() {
@@ -133,12 +134,15 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       } else {
         stopTimer();
+        sendAnswer('No Answer');
       }
     });
   }
 
   void stopTimer() {
-    _timer.cancel();
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
   }
 
   Color getOptionColor(String option) {
